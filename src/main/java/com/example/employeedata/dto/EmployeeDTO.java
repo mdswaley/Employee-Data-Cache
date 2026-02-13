@@ -2,6 +2,7 @@ package com.example.employeedata.dto;
 
 import com.example.employeedata.annotations.EmployeeRoleValidation;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
