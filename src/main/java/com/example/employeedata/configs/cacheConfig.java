@@ -58,9 +58,4 @@ public class cacheConfig {
                 .cacheDefaults(redisCacheConfiguration)
                 .build();
     }
-
-
-
-
-
 }

@@ -18,13 +18,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EmployeeDTO implements Serializable {
-
     private Long id;
-
-
     private String name;
-
-
     private String email;
 
     @Min(value = 18,message = "age should be greater then 18")
@@ -32,11 +27,8 @@ public class EmployeeDTO implements Serializable {
 
     @EmployeeRoleValidation
     private String role; //ADMIN, USER
-
     private Double salary;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfJoining;
-
-   private Boolean isActive;
+    private Boolean isActive;
 }
