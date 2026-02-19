@@ -132,6 +132,26 @@ class EmployeeServiceTest {
         log.error("Employee is already present with email {}", employeeDTO.getEmail());
     }
 
+    @Test
+    void UpdateEmp_whenEmpIsPresentWithGivenId(){
+        when(employeeRepository.existsById(1L)).thenReturn(true);
+
+        employeeDTO.setId(1L);
+        employeeDTO.setAge(24);
+        employeeDTO.setRole("USER");
+
+        EmployeeEntity employeeEntity1 = modelMapper.map(employeeDTO,EmployeeEntity.class);
+
+        when(employeeRepository.save(any(EmployeeEntity.class))).thenReturn(employeeEntity1);
+
+        EmployeeDTO updateEmp = employeeService.updateEmployeeById(employeeDTO.getId(), employeeDTO);
+
+        assertThat(updateEmp).isEqualTo(employeeDTO);
+        verify(employeeRepository).save(any(EmployeeEntity.class));
+        verify(employeeRepository).existsById(1L);
+        log.info("Employee is updated successfully.");
+    }
+
 
 
 

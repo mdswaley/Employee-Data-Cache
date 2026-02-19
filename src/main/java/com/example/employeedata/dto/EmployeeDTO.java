@@ -15,6 +15,8 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@ToString
+@EqualsAndHashCode
 public class EmployeeDTO implements Serializable {
     private Long id;
     private String name;
