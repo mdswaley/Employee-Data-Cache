@@ -50,9 +50,15 @@ public class EmployeeService {
     public EmployeeDTO createNewEmployee(EmployeeDTO inputEmployee) {
 //        to check if user is admin
 //        log something
+        isExistEmpByEmail(inputEmployee.getEmail());
         EmployeeEntity toSaveEntity = modelMapper.map(inputEmployee, EmployeeEntity.class);
         EmployeeEntity savedEmployeeEntity = employeeRepository.save(toSaveEntity);
         return modelMapper.map(savedEmployeeEntity, EmployeeDTO.class);
+    }
+
+    public void isExistEmpByEmail(String email){
+        boolean isExistEmp = employeeRepository.existsByEmail(email);
+        if(isExistEmp) throw new RuntimeException("Employee is already Present with email "+email);
     }
 
     @CachePut(cacheNames = CACHE_NAME, key = "result.id")

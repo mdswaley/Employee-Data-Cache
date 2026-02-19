@@ -18,6 +18,7 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,10 +31,8 @@ import static org.mockito.Mockito.*;
 @Slf4j
 class EmployeeServiceTest {
 
-    @Mock
     private EmployeeEntity employeeEntity;
 
-    @Mock
     private EmployeeDTO employeeDTO;
 
     @Spy
@@ -47,7 +46,7 @@ class EmployeeServiceTest {
 
     @BeforeEach
     void setUp(){
-        employeeEntity.builder()
+        employeeEntity = EmployeeEntity.builder()
                 .id(1L)
                 .name("MD Swaley")
                 .age(22)
@@ -85,7 +84,55 @@ class EmployeeServiceTest {
         assertThatThrownBy(()-> employeeService.getEmployeeById(1L))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Employee is not present with id=1");
+        log.error("Employee is not present with id 1");
     }
+
+    @Test
+    void GetAllEmp_whenEmpIsPresent(){
+        when(employeeRepository.findAll()).thenReturn(List.of(employeeEntity));
+        List<EmployeeDTO> getEmp = employeeService.getAllEmployees();
+
+        assertThat(getEmp).isNotNull();
+        assertThat(getEmp).isNotEmpty();
+        assertThat(getEmp.size()).isEqualTo(1);
+        log.info("Employees are present.");
+    }
+
+    @Test
+    void GetAllEmp_whenEmpIsNotPresent(){
+        when(employeeRepository.findAll()).thenReturn(List.of());
+        List<EmployeeDTO> getEmp = employeeService.getAllEmployees();
+
+        assertThat(getEmp).isEmpty();
+        log.error("Employees are not present.");
+    }
+
+    @Test
+    void CreateEmp_whenEmpIsNotPresentWithGivenEmail(){
+        when(employeeRepository.existsByEmail(employeeDTO.getEmail())).thenReturn(false);
+
+        when(employeeRepository.save(any(EmployeeEntity.class))).thenReturn(employeeEntity);
+
+        EmployeeDTO saveEmp = employeeService.createNewEmployee(employeeDTO);
+
+        assertThat(saveEmp).isNotNull();
+        assertThat(saveEmp.getEmail()).isEqualTo(employeeDTO.getEmail());
+
+        verify(employeeRepository).existsByEmail(employeeDTO.getEmail());
+        log.info("Employee is created with email {}", employeeDTO.getEmail());
+    }
+
+    @Test
+    void CreateEmp_whenEmpISPresentWithGivenEmail(){
+        when(employeeRepository.existsByEmail(employeeDTO.getEmail())).thenReturn(true);
+
+        assertThatThrownBy(()->employeeService.isExistEmpByEmail(employeeDTO.getEmail()))
+                .isInstanceOf(RuntimeException.class).hasMessage("Employee is already Present with email md123@gmail.com");
+
+        log.error("Employee is already present with email {}", employeeDTO.getEmail());
+    }
+
+
 
 
 
