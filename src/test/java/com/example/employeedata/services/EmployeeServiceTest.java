@@ -152,6 +152,17 @@ class EmployeeServiceTest {
         log.info("Employee is updated successfully.");
     }
 
+    @Test
+    void UpdateEmp_whenEmpIsNotPresentWithGivenId(){
+        Long id = 1L;
+        when(employeeRepository.existsById(id)).thenReturn(false);
+        assertThatThrownBy(()->employeeService.updateEmployeeById(1L, employeeDTO))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Employee not found with id: 1");
+
+        log.info("Employee is not present for update.");
+    }
+
 
 
 
