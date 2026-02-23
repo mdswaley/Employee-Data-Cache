@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
@@ -170,6 +171,18 @@ class EmployeeServiceTest {
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Employee not found with id: 1");
         log.error("Employee is present to delete with id : 1");
+    }
+
+    @Test
+    void DeleteEmp_whenEmpIsPresentWithGivenId(){
+        Long id = 1L;
+        when(employeeRepository.existsById(id)).thenReturn(true);
+
+        assertThatCode(()->employeeService.deleteEmployeeById(id))
+                .doesNotThrowAnyException();
+
+        verify(employeeRepository).existsById(id);
+        log.info("Employee is Deleted successfully with id : 1");
     }
 
 
