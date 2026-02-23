@@ -163,6 +163,15 @@ class EmployeeServiceTest {
         log.info("Employee is not present for update.");
     }
 
+    @Test
+    void DeleteEmp_whenEmpIsNotPresentWithGivenId(){
+        when(employeeRepository.existsById(1L)).thenReturn(false);
+        assertThatThrownBy(()->employeeService.deleteEmployeeById(1L))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Employee not found with id: 1");
+        log.error("Employee is present to delete with id : 1");
+    }
+
 
 
 
