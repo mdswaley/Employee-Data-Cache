@@ -18,7 +18,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.context.annotation.Import;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -184,6 +186,36 @@ class EmployeeServiceTest {
         verify(employeeRepository).existsById(id);
         log.info("Employee is Deleted successfully with id : 1");
     }
+
+    @Test
+    void UpdateEmpPartially_whenEmpIsPresentWithGivenId(){
+        Long id = 1L;
+        Map<String, Object> updated = new HashMap<>();
+
+        updated.put("name","Swaley");
+        updated.put("age", 23);
+        updated.put("salary", 20000.00);
+
+        when(employeeRepository.existsById(id)).thenReturn(true);
+        when(employeeRepository.findById(id)).thenReturn(Optional.of(employeeEntity));
+        when(employeeRepository.save(any(EmployeeEntity.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
+
+        EmployeeDTO updatedEmp = employeeService.updatePartialEmployeeById(id, updated);
+
+        assertThat(updatedEmp).isNotNull();
+        assertThat(updatedEmp.getName()).isEqualTo("Swaley");
+        assertThat(updatedEmp.getAge()).isEqualTo(23);
+        assertThat(updatedEmp.getSalary()).isEqualTo(20000.00);
+
+        verify(employeeRepository).existsById(id);
+        verify(employeeRepository).findById(id);
+        verify(employeeRepository).save(employeeEntity);
+
+        log.info("Employee is updated partially.");
+    }
+
+
 
 
 
