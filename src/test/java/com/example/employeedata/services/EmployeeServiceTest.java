@@ -198,8 +198,15 @@ class EmployeeServiceTest {
 
         when(employeeRepository.existsById(id)).thenReturn(true);
         when(employeeRepository.findById(id)).thenReturn(Optional.of(employeeEntity));
+
         when(employeeRepository.save(any(EmployeeEntity.class)))
                 .thenAnswer(invocation -> invocation.getArgument(0));
+//      thenAnswer() ->
+//      Whatever object you pass into save(…), return that exact same object.”
+//
+//      Not a copy.
+//      Not a new object.
+//      The same reference.
 
         EmployeeDTO updatedEmp = employeeService.updatePartialEmployeeById(id, updated);
 
@@ -230,10 +237,4 @@ class EmployeeServiceTest {
 
         log.error("Employee is not present with given id for partially update.");
     }
-
-
-
-
-
-
 }
