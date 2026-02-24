@@ -216,7 +216,20 @@ class EmployeeServiceTest {
     }
 
 
+    @Test
+    void UpdateEmpPartially_whenEmpIsNotPresentWithGivenId(){
+        Long id = 1L;
+        Map<String, Object> update = new HashMap<>();
+        when(employeeRepository.existsById(id)).thenReturn(false);
+//        this will not execute after existsById returns false. So that's why there will a error -> "UnnecessaryStubbingException"
+//        when(employeeRepository.findById(id)).thenReturn(Optional.empty());
 
+        assertThatThrownBy(()->employeeService.updatePartialEmployeeById(1L, update))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Employee not found with id: 1");
+
+        log.error("Employee is not present with given id for partially update.");
+    }
 
 
 
