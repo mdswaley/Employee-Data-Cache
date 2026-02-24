@@ -1,6 +1,7 @@
 package com.example.employeedata.controllers;
 
 import com.example.employeedata.dto.EmployeeDTO;
+import com.example.employeedata.entities.EmployeeEntity;
 import com.example.employeedata.exceptions.ResourceNotFoundException;
 import com.example.employeedata.services.EmployeeService;
 import jakarta.validation.Valid;
@@ -60,6 +61,7 @@ public class EmployeeController {
         if (employeeDTO == null) return ResponseEntity.notFound().build();
         return ResponseEntity.ok(employeeDTO);
     }
+
 
 }
 
