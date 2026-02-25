@@ -39,13 +39,27 @@ class EmployeeControllerTest extends AbstractIntegrationTest{
                     assertThat(employeeDTO1.getSalary()).isEqualTo(savedEmp.getSalary());
                     assertThat(employeeDTO1.getAge()).isEqualTo(savedEmp.getAge());
                 });
-        log.info("Get employee By id is called.");
+        log.info("Getting employee with given ID");
     }
 
     @Test
     void GetEmpById_WhenEmpIsNotPresent(){
+        Long id = 1L;
+        webTestClient.get()
+                .uri("/employees/{employeeId}", id)
+                .exchange()
+                .expectStatus()
+                .is4xxClientError()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {})
+                        .value(res ->{
+                            assertThat(res.getData()).isNull();
+                            assertThat(res.getError()).isNotNull();
+                        });
 
+        log.error("User is not present with given ID");
     }
+
+
 
 
 
