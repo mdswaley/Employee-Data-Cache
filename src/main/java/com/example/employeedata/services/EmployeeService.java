@@ -45,7 +45,7 @@ public class EmployeeService {
                 .collect(Collectors.toList());
     }
 
-    @CachePut(cacheNames = CACHE_NAME, key = "result.id")
+//    @CachePut(cacheNames = CACHE_NAME, key = "result.id")
     public EmployeeDTO createNewEmployee(EmployeeDTO inputEmployee) {
 //        to check if user is admin
 //        log something

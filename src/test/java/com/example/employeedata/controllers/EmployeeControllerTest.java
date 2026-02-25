@@ -59,6 +59,45 @@ class EmployeeControllerTest extends AbstractIntegrationTest{
         log.error("User is not present with given ID");
     }
 
+    @Test
+    void CreateEmp_whenEmpIsNotPresentWithGivenEmail(){
+        webTestClient.post()
+                .uri("/employees")
+                .bodyValue(employeeDTO)
+                .exchange()
+                .expectStatus()
+                .isCreated()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
+                })
+                .value(res ->{
+                    EmployeeDTO employeeDTO1 = res.getData();
+                    assertThat(employeeDTO1.getEmail()).isEqualTo(employeeDTO.getEmail());
+                    assertThat(employeeDTO1.getAge()).isEqualTo(employeeDTO.getAge());
+                });
+
+        log.info("Employee is created successfully.");
+    }
+
+    @Test
+    void NotCreateEmp_whenEmpIsPresentWithGivenEmail(){
+        EmployeeEntity savedEmp = employeeRepository.save(employeeEntity);
+
+        webTestClient.post()
+                .uri("/employees")
+                .bodyValue(employeeDTO)
+                .exchange()
+                .expectStatus()
+                .is5xxServerError()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
+                })
+                .value(res ->{
+                    assertThat(res.getError()).isNotNull();
+                    assertThat(res.getData()).isNull();
+                });
+
+        log.error("Employee is already present with given email.");
+    }
+
 
 
 
