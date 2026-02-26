@@ -60,7 +60,7 @@ public class EmployeeService {
         if(isExistEmp) throw new RuntimeException("Employee is already Present with email "+email);
     }
 
-    @CachePut(cacheNames = CACHE_NAME, key = "result.id")
+    @CachePut(cacheNames = CACHE_NAME, key = "#result.id")
     @Transactional
     public EmployeeDTO updateEmployeeById(Long employeeId, EmployeeDTO employeeDTO) {
         isExistsByEmployeeId(employeeId);

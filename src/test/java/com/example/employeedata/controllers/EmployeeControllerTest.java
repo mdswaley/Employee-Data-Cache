@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 
 
+import java.time.LocalDateTime;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
@@ -96,6 +98,38 @@ class EmployeeControllerTest extends AbstractIntegrationTest{
                 });
 
         log.error("Employee is already present with given email.");
+    }
+
+    @Test
+    void UpdateEmp_whenEmpIsPresentWithGivenId(){
+        EmployeeEntity savedEmp = employeeRepository.save(employeeEntity);
+
+        EmployeeDTO update1 = EmployeeDTO.builder()
+                .name("MD Swaley")
+                .age(28)
+                .role("ADMIN")
+                .email(employeeEntity.getEmail())
+                .dateOfJoining(LocalDateTime.now().toLocalDate())
+                .salary(18000.00)
+                .isActive(true).build();
+
+        webTestClient.put()
+                .uri("/employees/{id}",savedEmp.getId())
+                .bodyValue(update1)
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
+                })
+                .value(response ->{
+                    assertThat(response.getData()).isNotNull();
+                    assertThat(response.getData().getAge()).isEqualTo(28);
+                    assertThat(response.getData().getSalary()).isEqualTo(18000.00);
+                    assertThat(response.getData().getId()).isEqualTo(savedEmp.getId());
+                });
+
+        log.info("Updated emp of given ID.");
+
     }
 
 
