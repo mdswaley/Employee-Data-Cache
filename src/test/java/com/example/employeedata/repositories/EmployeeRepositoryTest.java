@@ -51,7 +51,7 @@ class EmployeeRepositoryTest {
     void ExistByEmail_whenGivenEmailIsNotPresent(){
         Boolean emp = employeeRepository.existsByEmail(employeeEntity.getEmail());
         assertThat(emp).isFalse();
-        log.error("Employee is Not Exist with given email.");
+        log.warn("Employee is Not Exist with given email.");
     }
 
 

@@ -58,7 +58,7 @@ class EmployeeControllerTest extends AbstractIntegrationTest{
                             assertThat(res.getError()).isNotNull();
                         });
 
-        log.error("User is not present with given ID");
+        log.warn("User is not present with given ID");
     }
 
     @Test
@@ -97,7 +97,7 @@ class EmployeeControllerTest extends AbstractIntegrationTest{
                     assertThat(res.getData()).isNull();
                 });
 
-        log.error("Employee is already present with given email.");
+        log.warn("Employee is already present with given email.");
     }
 
     @Test

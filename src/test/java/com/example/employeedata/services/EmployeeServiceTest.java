@@ -87,7 +87,7 @@ class EmployeeServiceTest {
         assertThatThrownBy(()-> employeeService.getEmployeeById(1L))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Employee is not present with id=1");
-        log.error("Employee is not present with id 1");
+        log.warn("Employee is not present with id 1");
     }
 
     @Test
@@ -107,7 +107,7 @@ class EmployeeServiceTest {
         List<EmployeeDTO> getEmp = employeeService.getAllEmployees();
 
         assertThat(getEmp).isEmpty();
-        log.error("Employees are not present.");
+        log.warn("Employees are not present.");
     }
 
     @Test
@@ -132,7 +132,7 @@ class EmployeeServiceTest {
         assertThatThrownBy(()->employeeService.isExistEmpByEmail(employeeDTO.getEmail()))
                 .isInstanceOf(RuntimeException.class).hasMessage("Employee is already Present with email md123@gmail.com");
 
-        log.error("Employee is already present with email {}", employeeDTO.getEmail());
+        log.warn("Employee is already present with email {}", employeeDTO.getEmail());
     }
 
     @Test
@@ -172,7 +172,7 @@ class EmployeeServiceTest {
         assertThatThrownBy(()->employeeService.deleteEmployeeById(1L))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Employee not found with id: 1");
-        log.error("Employee is present to delete with id : 1");
+        log.warn("Employee is present to delete with id : 1");
     }
 
     @Test
@@ -235,6 +235,6 @@ class EmployeeServiceTest {
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Employee not found with id: 1");
 
-        log.error("Employee is not present with given id for partially update.");
+        log.warn("Employee is not present with given id for partially update.");
     }
 }
