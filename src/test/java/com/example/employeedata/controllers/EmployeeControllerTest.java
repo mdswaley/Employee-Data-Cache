@@ -218,6 +218,31 @@ class EmployeeControllerTest extends AbstractIntegrationTest{
         log.info("Employee is update partially for given ID.");
     }
 
+    @Test
+    void UpdatePartially_whenEmpIsNotPresentWithGivenID(){
+        EmployeeDTO update = EmployeeDTO.builder()
+                .age(30)
+                .email("swaley@gmail.com")
+                .build();
+
+        webTestClient.patch()
+                .uri("/employees/{id}", employeeDTO.getId())
+                .bodyValue(update)
+                .exchange()
+                .expectStatus()
+                .is4xxClientError()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
+                })
+                .value(res ->{
+                    assertThat(res.getData()).isNull();
+                    assertThat(res.getError()).isNotNull();
+                    assertThat(res.getError().getMessage()).isEqualTo("Employee not found with id: 1");
+                });
+
+        log.warn("Employee is not present with given ID for partially update.");
+    }
+
+
 
 
 
