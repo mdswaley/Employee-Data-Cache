@@ -175,6 +175,24 @@ class EmployeeControllerTest extends AbstractIntegrationTest{
         log.info("Employee is Deleted with given ID.");
     }
 
+    @Test
+    void DeleteEmp_whenEmpIsNotPresentWithGivenID(){
+        webTestClient.delete()
+                .uri("/employees/{id}", employeeDTO.getId())
+                .exchange()
+                .expectStatus()
+                .is4xxClientError()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<Boolean>>() {
+                })
+                .value(res ->{
+                    assertThat(res.getData()).isNull();
+                    assertThat(res.getError()).isNotNull();
+                    assertThat(res.getError().getMessage()).isEqualTo("Employee not found with id: 1");
+                });
+
+        log.warn("Employee is not present with given ID for Delete.");
+    }
+
 
 
 
