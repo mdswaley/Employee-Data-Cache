@@ -132,6 +132,33 @@ class EmployeeControllerTest extends AbstractIntegrationTest{
 
     }
 
+    @Test
+    void UpdateEmp_whenEmpIsNotPresentWithGivenId(){
+        EmployeeDTO update1 = EmployeeDTO.builder()
+                .name("MD Swaley")
+                .age(28)
+                .role("ADMIN")
+                .email(employeeEntity.getEmail())
+                .dateOfJoining(LocalDateTime.now().toLocalDate())
+                .salary(18000.00)
+                .isActive(true).build();
+
+        webTestClient.put()
+                .uri("/employees/{id}", employeeDTO.getId())
+                .bodyValue(update1)
+                .exchange()
+                .expectStatus()
+                .is4xxClientError()
+                .expectBody(new ParameterizedTypeReference<ApiResponse<EmployeeDTO>>() {
+                })
+                .value(res -> {
+                    assertThat(res.getData()).isNull();
+                    assertThat(res.getError()).isNotNull();
+                });
+
+        log.warn("Employee is Not Present with given ID for update.");
+    }
+
 
 
 
