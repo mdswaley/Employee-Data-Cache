@@ -81,17 +81,30 @@ public class EmployeeService {
         return true;
     }
 
-    @CachePut(cacheNames = CACHE_NAME, key = "result.id")
+    @CachePut(cacheNames = CACHE_NAME, key = "#result.id")
     @Transactional
     public EmployeeDTO updatePartialEmployeeById(Long employeeId, Map<String, Object> updates) {
+
         isExistsByEmployeeId(employeeId);
+
         EmployeeEntity employeeEntity = employeeRepository.findById(employeeId).get();
+
         updates.forEach((field, value) -> {
-            Field fieldToBeUpdated = ReflectionUtils.findRequiredField(EmployeeEntity.class, field);
+
+            // 🚫 Block ID updates
+            if (field.equalsIgnoreCase("id")) {
+                return;
+            }
+
+            Field fieldToBeUpdated =
+                    ReflectionUtils.findRequiredField(EmployeeEntity.class, field);
             fieldToBeUpdated.setAccessible(true);
+
             ReflectionUtils.setField(fieldToBeUpdated, employeeEntity, value);
         });
-        return modelMapper.map(employeeRepository.save(employeeEntity), EmployeeDTO.class);
+
+        EmployeeEntity updated = employeeRepository.save(employeeEntity);
+        return modelMapper.map(updated, EmployeeDTO.class);
     }
 }
 
