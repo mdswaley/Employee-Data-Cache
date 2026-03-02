@@ -1,8 +1,6 @@
 package com.example.employeedata.controllers;
 
 import com.example.employeedata.dto.EmployeeDTO;
-import com.example.employeedata.entities.EmployeeEntity;
-import com.example.employeedata.exceptions.ResourceNotFoundException;
 import com.example.employeedata.services.EmployeeService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/employees")

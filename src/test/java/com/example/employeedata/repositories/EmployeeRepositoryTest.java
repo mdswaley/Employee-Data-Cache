@@ -1,7 +1,6 @@
 package com.example.employeedata.repositories;
 
 import com.example.employeedata.EmployeeTestContainer;
-import com.example.employeedata.dto.EmployeeDTO;
 import com.example.employeedata.entities.EmployeeEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-import org.w3c.dom.stylesheets.LinkStyle;
 import static org.assertj.core.api.Assertions.assertThat;
 import java.time.LocalDateTime;
 
