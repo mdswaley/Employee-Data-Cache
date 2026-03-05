@@ -8,11 +8,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 @Slf4j
-class EmployeeDataApplicationTests {
+class EmployeeDataApplicationTest {
 
 	@Test
 	void contextLoads() {
+        log.info("Spring Boot context loaded successfully");
 	}
+
 
     @BeforeEach
     void beforeCall(){
