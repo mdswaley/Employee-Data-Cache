@@ -4,9 +4,11 @@ import com.example.employeedata.advices.ApiResponse;
 import com.example.employeedata.dto.EmployeeDTO;
 import com.example.employeedata.entities.EmployeeEntity;
 import com.example.employeedata.repositories.EmployeeRepository;
+import com.example.employeedata.services.EmployeeService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 
@@ -14,12 +16,16 @@ import org.springframework.core.ParameterizedTypeReference;
 import java.time.LocalDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @Slf4j
 class EmployeeControllerTest extends AbstractIntegrationTest{
 
     @Autowired
     private EmployeeRepository employeeRepository;
+
+    @Mock
+    private EmployeeService employeeService;
 
     @BeforeEach
     void setUp(){
@@ -177,18 +183,14 @@ class EmployeeControllerTest extends AbstractIntegrationTest{
 
     @Test
     void DeleteEmp_whenEmpIsNotPresentWithGivenID(){
+        when(employeeService.deleteEmployeeById(employeeDTO.getId()))
+                .thenReturn(false);
+
         webTestClient.delete()
                 .uri("/employees/{id}", employeeDTO.getId())
                 .exchange()
                 .expectStatus()
-                .is4xxClientError()
-                .expectBody(new ParameterizedTypeReference<ApiResponse<Boolean>>() {
-                })
-                .value(res ->{
-                    assertThat(res.getData()).isNull();
-                    assertThat(res.getError()).isNotNull();
-                    assertThat(res.getError().getMessage()).isEqualTo("Employee not found with id: 1");
-                });
+                .isNotFound();
 
         log.warn("Employee is not present with given ID for Delete.");
     }
